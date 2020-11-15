@@ -1,0 +1,118 @@
+import turtle   #import turtle module
+
+wind = turtle.Screen()  #preparing for screen to the game
+wind.bgcolor('black')  #color of screen
+wind.title('ping pong')   #title appear in the screen
+wind.setup(600, 400) #height and width of screen
+wind.tracer(0)  # the start point
+
+#stick1
+stick1 = turtle.Turtle()
+stick1.speed(0.5)
+stick1.shape('square')
+stick1.color('red')
+stick1.penup()
+stick1.shapesize(4, .5)
+stick1.goto(-250, 0)
+
+
+#stick2
+stick2 = turtle.Turtle() #set up the module of the stick
+stick2.speed(0) #set the speed of moving
+stick2.shape('square') #set the shape of the stick
+stick2.color('blue') #set the color 
+stick2.penup()   #set the stick moving without points
+stick2.shapesize(4, .5) #set the scratches of the stick
+stick2.goto(250, 0) #set the place where stick stop
+ 
+
+#ball
+ball = turtle.Turtle()
+ball.shape('circle')
+ball.color('white')
+ball.penup()
+ball.goto(0,0)
+ball.speed(0)
+ball.dx = .25
+ball.dy = .25
+
+#score
+score1 = 0
+score2 = 0
+score = turtle.Turtle()
+score.speed(0)
+score.color('white')
+score.penup()
+score.hideturtle()
+score.goto(0,170)
+score.write('player1: 0  player2: 0')
+
+
+#function of game
+def stick1_up():  #moving up
+    y = stick1.ycor() #get the y coordinates
+    y += 20 #set the increasing by 20
+    stick1.sety(y) #set the new y coordinate
+    
+def stick1_down():
+    y = stick1.ycor()
+    y -= 20
+    stick1.sety(y)
+    
+def stick2_up():
+    y = stick2.ycor()
+    y += 20
+    stick2.sety(y)
+    
+def stick2_down():
+    y = stick2.ycor()
+    y -= 20
+    stick2.sety(y)
+    
+
+    
+
+#order of moving
+wind.listen() #order the screen by pressing letter or uo or down
+wind.onkeypress(stick1_up, "q") #set the order by pressing q letter
+wind.onkeypress(stick1_down, "z")
+wind.onkeypress(stick2_up, 'Up')
+wind.onkeypress(stick2_down, "Down")
+    
+
+
+while True:
+    wind.update()   #set the update of the screen evert time I make run
+    
+    ball.setx(ball.xcor() + ball.dx) #set ball at x coordinate by moving
+    ball.sety(ball.ycor() + ball.dy)
+    
+    if ball.ycor() > 190: #set moving ball in positive up
+        ball.sety(190) #new set of y coordinate
+        ball.dy *= -1 #set the reflection of the ball
+        
+    if ball.ycor() < -190:
+        ball.sety(-190)
+        ball.dy *= -1
+        
+    if ball.xcor() > 290: #set coordinate of x for moving ball
+        ball.goto(0,0) #set the position after hiting the end of x coordinate line
+        ball.dx *= -1 #reflection the ball 
+        score1 += 1
+        score.clear()
+        score.write('player1: {}  player2: {}'.format(score1, score2))
+        
+    if ball.xcor() < -290:
+        ball.goto(0, 0)
+        ball.dx *= -1
+        score2 += 1
+        score.clear()
+        score.write('player1: {}  player2: {}'.format(score1, score2))
+        
+    if (ball.xcor() > 240 and ball.xcor() < 250) and (ball.ycor() < stick2.ycor() + 30 and ball.ycor() > stick2.ycor() -30):
+        ball.setx(240)
+        ball.dx *= -1
+        
+    if (ball.xcor() < -240 and ball.xcor() > -250) and (ball.ycor() < stick1.ycor() + 30 and ball.ycor() > stick1.ycor() -30):
+        ball.setx(-240)
+        ball.dx *= -1
